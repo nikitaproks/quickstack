@@ -1,0 +1,20 @@
+[project]
+name = "quickstack"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "Mykyta Prokaiev", email = "mykytaprokaiev@gmail.com" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "click>=8.1.7",
+    "copier>=9.4.1",
+]
+
+[project.scripts]
+quickstack = "quickstack:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"

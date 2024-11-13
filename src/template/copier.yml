@@ -1,0 +1,25 @@
+project_name:
+  type: str
+  help: "Enter the new project name."
+
+frontend:
+  type: choice
+  choices: ["Svelte", "None"]
+  help: "Choose a frontend framework for the project."
+
+backend:
+  type: choice
+  choices: ["FastAPI", "None"]
+  help: "Choose a backend framework for the project."
+
+database:
+  type: choice
+  choices: ["PostgreSQL", "None"]
+  help: "Select a database to use with your backend."
+  when: "backend != 'None'"
+
+user_management:
+  type: bool
+  default: false
+  help: "Include user management?"
+  when: "backend == 'FastAPI'"
