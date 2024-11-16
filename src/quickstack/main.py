@@ -12,7 +12,7 @@ from copier import run_copy
 )
 def generate_project(destination: str):
     """Generate a project from the template."""
-    template_path = os.path.join(os.path.dirname(__file__), "../project_template")
+    template_path = os.path.join(os.path.dirname(__file__), "../template")
     run_copy(template_path, destination)
     click.echo("Project generated successfully at {}".format(destination))
 

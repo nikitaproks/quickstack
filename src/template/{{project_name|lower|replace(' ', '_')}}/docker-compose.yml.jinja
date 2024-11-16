@@ -1,0 +1,65 @@
+services:
+    {% if database == "PostgreSQL" -%}
+    db:
+        image: postgres
+        restart: always
+        volumes:
+            # TODO: Change to persistent volume
+            - /path/to/data:/var/lib/postgresql/data
+        environment:
+            - POSTGRES_DB=${DB_NAME}
+            - POSTGRES_USER=${DB_USER}
+            - POSTGRES_PASSWORD=${DB_PASS}
+        ports:
+            - "${DB_PORT}:${DB_PORT}"
+        networks:
+            - webnet
+        healthcheck:
+            test: ["CMD", "pg_isready", "-U", "${DB_USER}", "-d", "${DB_NAME}"]
+            interval: 10s
+            timeout: 5s
+            retries: 3
+    {%- endif %}
+    {% if backend == "FastAPI" -%}
+    server_fastapi:
+        image: mykytaproks/{{project_name}}_server_fastapi:${TAG}
+        restart: unless-stopped
+        environment:
+            - DB_NAME=${DB_NAME}
+            - DB_USER=${DB_USER}
+            - DB_PASS=${DB_PASS}
+            - DB_HOST=${DB_HOST}
+            - DB_PORT=${DB_PORT}
+        {% if database != "None" -%}
+        depends_on:
+            - db
+        {%- endif %}
+        networks:
+            - webnet
+        healthcheck:
+            test: ["CMD", "curl", "-f", "http://localhost:8000/api/health"]
+            interval: 10s
+            timeout: 5s
+            retries: 30
+    {%- endif %}
+    caddy:
+        image: caddy:latest
+        ports:
+            - "80:80"
+            - "443:443"
+        volumes:
+            - ./Caddyfile:/etc/caddy/Caddyfile
+            # TODO: Change to persistent volume
+            - caddy_data:/path/to/data
+            # TODO: Change to persistent volume
+            - caddy_config:/path/to/config
+        environment:
+            - DOMAIN=${DOMAIN}
+        depends_on:
+            {% if backend == "FastAPI" -%}
+            server_fastapi:
+                condition: service_healthy
+            {%- endif %}
+
+networks:
+    webnet:

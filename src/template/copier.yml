@@ -1,25 +1,51 @@
 project_name:
-  type: str
-  help: "Enter the new project name."
+    type: str
+    help: "Enter the new project name."
 
-frontend:
-  type: choice
-  choices: ["Svelte", "None"]
-  help: "Choose a frontend framework for the project."
+# frontend:
+#   type: str
+#   choices:
+#       - Svelte
+#       - None
+#   help: "Choose a frontend framework for the project."
 
 backend:
-  type: choice
-  choices: ["FastAPI", "None"]
-  help: "Choose a backend framework for the project."
+    type: str
+    choices:
+        - FastAPI
+        - None
+    help: "Choose a backend framework for the project."
+
+python_version:
+    type: float
+    choices:
+        - 3.12
+        - 3.13
+    help: "Choose a Python version for the project."
+    when: "backend == 'FastAPI'"
 
 database:
-  type: choice
-  choices: ["PostgreSQL", "None"]
-  help: "Select a database to use with your backend."
-  when: "backend != 'None'"
+    type: str
+    choices:
+        - PostgreSQL
+        - None
+    help: "Select a database to use with your backend."
+    when: "backend != 'None'"
 
-user_management:
-  type: bool
-  default: false
-  help: "Include user management?"
-  when: "backend == 'FastAPI'"
+# user_management:
+#   type: bool
+#   default: false
+#   help: "Include user management?"
+#   when: "backend == 'FastAPI'"
+
+# ci:
+#   type: str
+#   choices:
+#       - github
+#       - None
+#   help: "Choose a CI pipeline to use for the project."
+
+_message_after_copy: |
+    Your project "{{ project_name }}" has been created successfully!
+
+    Next step: Read "README.md" to finish project initialization.

@@ -1,0 +1,12 @@
+${DOMAIN} {
+    {% if backend != "None" -%}
+    # Proxy requests to the backend service at /api
+    reverse_proxy /api/* server_{{backend|lower}}:8000
+    {%- endif %}
+
+    # Redirect HTTP to HTTPS automatically
+    @httpOnly {
+        protocol http
+    }
+    redir @httpOnly https://{host}{uri}
+}

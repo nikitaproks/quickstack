@@ -3,10 +3,8 @@ name = "quickstack"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
-authors = [
-    { name = "Mykyta Prokaiev", email = "mykytaprokaiev@gmail.com" }
-]
-requires-python = ">=3.12"
+authors = [{ name = "Mykyta Prokaiev", email = "mykytaprokaiev@gmail.com" }]
+requires-python = ">=3.12, <3.13"
 dependencies = [
     "click>=8.1.7",
     "copier>=9.4.1",

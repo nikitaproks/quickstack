@@ -1,0 +1,6 @@
+http://127.0.0.1 {
+    {% if backend != "None" -%}
+    # Proxy requests to the backend service at /api
+    reverse_proxy /api/* server_{{backend|lower}}:8000
+    {%- endif %}
+}

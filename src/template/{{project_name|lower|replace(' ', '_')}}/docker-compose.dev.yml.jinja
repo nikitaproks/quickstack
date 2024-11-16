@@ -1,0 +1,64 @@
+services:
+    {% if database == "PostgreSQL" -%}
+    db:
+        image: postgres
+        volumes:
+            - postgres_data:/var/lib/postgresql/data
+        environment:
+            - POSTGRES_DB=${DB_NAME}
+            - POSTGRES_USER=${DB_USER}
+            - POSTGRES_PASSWORD=${DB_PASS}
+        ports:
+            - "${DB_PORT}:${DB_PORT}"
+        networks:
+            - webnet
+    {%- endif %}
+    {% if backend == "FastAPI" -%}
+    server_fastapi:
+        build:
+            context: ./server_fastapi
+            dockerfile: Dockerfile.dev
+        volumes:
+            - static_volume:/www/static
+            - media_volume:/www/media
+            - ./server_fastapi:/app
+        command: /opt/venv/bin/fastapi dev server/main.py --reload --host 0.0.0.0 --port 8000
+        environment:
+            - DB_NAME=${DB_NAME}
+            - DB_USER=${DB_USER}
+            - DB_PASS=${DB_PASS}
+            - DB_HOST=${DB_HOST}
+            - DB_PORT=${DB_PORT}
+        {% if database != "None" -%}
+        depends_on:
+            - db
+        {%- endif %}
+        networks:
+            - webnet
+    {%- endif %}
+    caddy:
+        image: caddy:latest
+        ports:
+          - "80:80"
+        volumes:
+          - ./Caddyfile.dev:/etc/caddy/Caddyfile
+        {% if backend != "None" -%}
+        depends_on:
+            {% if backend == "FastAPI" -%}
+            - server_fastapi
+            {%- endif %}
+        {%- endif %}
+        networks:
+            - webnet
+
+volumes:
+    {% if database == "PostgreSQL" -%}
+    postgres_data:
+    {%- endif %}
+    {% if backend == "FastAPI" -%}
+    static_volume:
+    media_volume:
+    {%- endif %}
+
+networks:
+  webnet:
