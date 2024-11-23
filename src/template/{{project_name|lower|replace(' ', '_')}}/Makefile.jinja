@@ -4,10 +4,15 @@ run-dev:
 stop-dev:
 	docker compose -f docker-compose.dev.yml down
 
-test: test-server-fastapi
-
+{% if backend == 'FastAPI' %}
 test-server-fastapi:
-	DB_NAME=test_{{project_name}}_db docker compose -f docker-compose.dev.yml up -d db
-	docker compose -f docker-compose.dev.yml up -d server_fastapi --build
-	docker compose -f docker-compose.dev.yml exec server_fastapi /opt/venv/bin/pytest tests
-	docker compose -f docker-compose.dev.yml down
+	DB_NAME=test_{{project_name}}_db docker compose -f docker-compose.dev.yml up -d db;\
+	docker compose -f docker-compose.dev.yml up -d server_fastapi --build;\
+	docker compose -f docker-compose.dev.yml exec server_fastapi /opt/venv/bin/pytest tests;\
+	docker compose -f docker-compose.dev.yml down;\
+
+lint-server-fastapi:
+    cd server_fastapi;\
+    uv run ruff check . ;\
+    uv run ruff format --check .;\
+{% endif %}

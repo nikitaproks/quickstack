@@ -38,12 +38,12 @@ database:
 #   help: "Include user management?"
 #   when: "backend == 'FastAPI'"
 
-# ci:
-#   type: str
-#   choices:
-#       - github
-#       - None
-#   help: "Choose a CI pipeline to use for the project."
+ci:
+  type: str
+  choices:
+      - Github
+      - None
+  help: "Choose a CI provider to use for the project."
 
 _message_after_copy: |
     Your project "{{ project_name }}" has been created successfully!

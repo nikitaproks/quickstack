@@ -37,11 +37,11 @@ services:
             - webnet
     {%- endif %}
     caddy:
-        image: caddy:latest
+        build:
+            context: ./caddy
+            dockerfile: Dockerfile.dev
         ports:
           - "80:80"
-        volumes:
-          - ./Caddyfile.dev:/etc/caddy/Caddyfile
         {% if backend != "None" -%}
         depends_on:
             {% if backend == "FastAPI" -%}

@@ -9,8 +9,15 @@ authors = [
 requires-python = ">={{python_version}}, <{{python_version + 0.1}}"
 dependencies = [
     "fastapi[standard]",
-    "pytest=*"
 ]
+
+[dependency-groups]
+dev = [
+    "pytest",
+    "mypy",
+    "ruff",
+]
+
 
 [project.scripts]
 server = "server:main"

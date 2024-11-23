@@ -9,12 +9,12 @@ Your tool for quickly setting up a new full stack (or not) project.
 - [ ] Add PYPI release pipeline
 
 ### Template CI/CD
-- [ ] Add support to choose CI/CD provider
+- [x] Add support to choose CI/CD provider
 #### Github Actions
-- [ ] Add support for Github Actions
-- [ ] Add linting pipeline
-- [ ] Add testing pipeline
-- [ ] Add Docker deploy pipeline
+- [x] Add support for Github Actions
+- [x] Add linting pipeline
+- [x] Add testing pipeline
+- [x] Add Docker deploy pipeline
 #### Gitlab CI/CD
 - [ ] Add support for Gitlab CI/CD
 - [ ] Add linting pipeline
@@ -24,8 +24,8 @@ Your tool for quickly setting up a new full stack (or not) project.
 ### Backend
 - [x] Add option to choose backend framework
 #### FastAPI
-- [ ] Create docker container for prod
-- [ ] Update docker compose file for prod
+- [x] Create docker container for prod
+- [x] Update docker compose file for prod
 - [ ] Setup directory structure
 - [ ] Add DB setup code
 - [ ] Add Alembic support

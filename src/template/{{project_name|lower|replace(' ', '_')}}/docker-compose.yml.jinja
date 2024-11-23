@@ -3,9 +3,9 @@ services:
     db:
         image: postgres
         restart: always
-        volumes:
-            # TODO: Change to persistent volume
-            - /path/to/data:/var/lib/postgresql/data
+        # volumes:
+        #     # TODO: Change to persistent volume
+        #     - /path/to/data:/var/lib/postgresql/data
         environment:
             - POSTGRES_DB=${DB_NAME}
             - POSTGRES_USER=${DB_USER}
@@ -22,7 +22,7 @@ services:
     {%- endif %}
     {% if backend == "FastAPI" -%}
     server_fastapi:
-        image: mykytaproks/{{project_name}}_server_fastapi:${TAG}
+        image: ${DOCKERHUB_USERNAME}/{{project_name}}_server_fastapi:${TAG}
         restart: unless-stopped
         environment:
             - DB_NAME=${DB_NAME}
@@ -37,22 +37,21 @@ services:
         networks:
             - webnet
         healthcheck:
-            test: ["CMD", "curl", "-f", "http://localhost:8000/api/health"]
+            test: ["CMD", "curl", "-f", "http://127.0.0.1:8000/api/health"]
             interval: 10s
             timeout: 5s
-            retries: 30
+            retries: 10
     {%- endif %}
     caddy:
-        image: caddy:latest
+        image: ${DOCKERHUB_USERNAME}/{{project_name}}_caddy:${TAG}
         ports:
             - "80:80"
             - "443:443"
-        volumes:
-            - ./Caddyfile:/etc/caddy/Caddyfile
-            # TODO: Change to persistent volume
-            - caddy_data:/path/to/data
-            # TODO: Change to persistent volume
-            - caddy_config:/path/to/config
+        # volumes:
+        #     # TODO: Change to persistent volume
+        #     - caddy_data:/path/to/data
+        #     # TODO: Change to persistent volume
+        #     - caddy_config:/path/to/config
         environment:
             - DOMAIN=${DOMAIN}
         depends_on:
@@ -60,6 +59,8 @@ services:
             server_fastapi:
                 condition: service_healthy
             {%- endif %}
+        networks:
+            - webnet
 
 networks:
     webnet:

@@ -12,10 +12,20 @@
 Open `.env` file and set the environment variables.
 
 ## Setup
+### Git
+1. Run `git init` in project root to initialize a new git repository.
 {% if backend == 'FastAPI' -%}
 ### FastAPI
 1. `cd server_fastapi`
 2. `uv sync`
+{%- endif %}
+{% if ci == 'Github' -%}
+### GitHub
+1. Create a new repository on GitHub.
+2. Add remote origin to current project
+3. Add following secrets to the CI in Github:
+    - `DOCKER_USERNAME` - Docker Hub username
+    - `DOCKERHUB_TOKEN` - Docker Hub access token/password
 {%- endif %}
 
 ## Local development
